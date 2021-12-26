@@ -5,6 +5,8 @@ import (
 	"os"
 	"flag"
 	"path/filepath"
+	//"image/png"
+	"strings"
 )
 
 func main() {
@@ -19,6 +21,10 @@ func main() {
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error: %s: no such file or directory\n", dir)
 				return err
+			}
+			//fmt.Println(path);
+			if info.IsDir() || !strings.HasSuffix(info.Name(), ".jpg") {
+				return nil
 			}
 			fmt.Println(path);
 			return nil
