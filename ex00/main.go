@@ -3,8 +3,10 @@ package main
 import (
 	"errors"
 	"flag"
+	"io"
 	"io/fs"
 	"fmt"
+	"image"
 	"image/jpeg"
 	"image/png"
 	"os"
@@ -15,6 +17,21 @@ import (
 var iFlag = flag.String("i", "jpg", "input file extension")
 var oFlag = flag.String("o", "png", "output file extension")
 
+func writeImage(file io.Writer, img image.Image) (error) {
+	if err := png.Encode(file, img); err != nil {
+		return err
+	}
+	return nil
+}
+
+func readImage(file io.Reader) (img image.Image, err error) {
+	img, err = jpeg.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
 func convert(path string) (err error) {
 	in_path := path
 	out_path := strings.Replace(path, ".jpg", ".png", 1)
@@ -22,7 +39,7 @@ func convert(path string) (err error) {
 	if err != nil {
 		return err
 	}
-	in_img, err := jpeg.Decode(in_file)
+	in_img, err := readImage(in_file)
 	if err != nil {
 		return err
 	}
@@ -33,8 +50,7 @@ func convert(path string) (err error) {
 	if err != nil {
 		return err
 	}
-	if err := png.Encode(out_file, in_img); err != nil {
-		out_file.Close()
+	if err := writeImage(out_file, in_img); err != nil {
 		return err
 	}
 	defer func() {
