@@ -17,24 +17,33 @@ import (
 var iFlag = flag.String("i", "jpg", "input file extension")
 var oFlag = flag.String("o", "png", "output file extension")
 
-func writeImage(file io.Writer, img image.Image) (error) {
-	if err := png.Encode(file, img); err != nil {
+func writeImage(file io.Writer, img image.Image) (err error) {
+	switch *oFlag {
+	case "jpg":
+		err = jpeg.Encode(file, img, nil)
+	case "png":
+		err = png.Encode(file, img)
+	}
+	if err != nil {
 		return err
 	}
 	return nil
 }
 
 func readImage(file io.Reader) (img image.Image, err error) {
-	img, err = jpeg.Decode(file)
+	switch *iFlag {
+	case "jpg":
+		img, err = jpeg.Decode(file)
+	case "png":
+		img, err = png.Decode(file)
+	}
 	if err != nil {
 		return nil, err
 	}
 	return img, nil
 }
 
-func convert(path string) (err error) {
-	in_path := path
-	out_path := strings.Replace(path, ".jpg", ".png", 1)
+func convert(in_path string, out_path string) (err error) {
 	in_file, err := os.Open(in_path)
 	if err != nil {
 		return err
@@ -59,8 +68,14 @@ func convert(path string) (err error) {
 	return nil
 }
 
-func flagValidate(flag string) (error) {
-	switch flag {
+func flagValidate(iflag string, oflag string) (error) {
+	switch iflag {
+	case "jpg", "png":
+		return nil
+	default:
+		return errors.New("error: invalide extension")
+	}
+	switch oflag {
 	case "jpg", "png":
 		return nil
 	default:
@@ -71,19 +86,18 @@ func flagValidate(flag string) (error) {
 func main() {
 	flag.Parse()
 	args := flag.Args()
+	// non-arg check
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "error: invalide argument")
 		return
 	}
 	// flag check
-	if err := flagValidate(*iFlag); err != nil {
+	if err := flagValidate(*iFlag, *oFlag); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	if err := flagValidate(*oFlag); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
+	iExt := "." + *iFlag
+	oExt := "." + *oFlag
 	for _, dir := range args {
 		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
 			if err != nil {
@@ -93,12 +107,15 @@ func main() {
 			if info.IsDir() {
 				return nil
 			}
-			if !strings.HasSuffix(path, ".jpg") {
+			if !strings.HasSuffix(path, iExt) {
 				fmt.Fprintf(os.Stderr, "error: %s is not a valid file\n", path)
 				return nil
 			}
-			if err := convert(path); err != nil {
-				return errors.New("error : failed to convert")
+			in_path := path
+			out_path := strings.Replace(path, iExt, oExt, 1)
+			if err := convert(in_path, out_path); err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				return nil
 			}
 			return nil
 		})
