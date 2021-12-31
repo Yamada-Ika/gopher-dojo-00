@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"io/fs"
 	"fmt"
 	"image/jpeg"
 	"image/png"
@@ -19,7 +20,7 @@ func main() {
 		return
 	}
 	for _, dir := range args {
-		filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error: %s: no such file or directory\n", path)
 				return err
