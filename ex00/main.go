@@ -15,7 +15,7 @@ import (
 var iFlag = flag.String("i", "jpg", "input file extension")
 var oFlag = flag.String("o", "png", "output file extension")
 
-func convert(path string) error {
+func convert(path string) (err error) {
 	if !strings.HasSuffix(path, ".jpg") {
 		return errors.New(fmt.Sprintf("error: %s is not a valid file\n", path))
 	}
@@ -29,9 +29,9 @@ func convert(path string) error {
 	if err != nil {
 		return err
 	}
-	if err := in_file.Close(); err != nil {
-		return err
-	}
+	defer func() {
+		err = in_file.Close()
+	}()
 	out_file, err := os.Create(out_path)
 	if err != nil {
 		return err
@@ -40,9 +40,9 @@ func convert(path string) error {
 		out_file.Close()
 		return err
 	}
-	if err := out_file.Close(); err != nil {
-		return err
-	}
+	defer func() {
+		err = out_file.Close()
+	}()
 	return nil
 }
 
