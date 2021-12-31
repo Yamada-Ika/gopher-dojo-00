@@ -73,14 +73,14 @@ func convert(in_path string, out_path string) (err error) {
 	return nil
 }
 
-func flagValidate(iflag string, oflag string) (error) {
-	switch iflag {
+func flagValidate() (error) {
+	switch *iFlag {
 	case "jpg", "png", "gif":
 		return nil
 	default:
 		return errors.New("error: invalide extension")
 	}
-	switch oflag {
+	switch *oFlag {
 	case "jpg", "png", "gif":
 		return nil
 	default:
@@ -97,7 +97,7 @@ func main() {
 		return
 	}
 	// flag check
-	if err := flagValidate(*iFlag, *oFlag); err != nil {
+	if err := flagValidate(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
