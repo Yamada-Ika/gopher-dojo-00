@@ -93,12 +93,10 @@ func flagValidate() (error) {
 func main() {
 	flag.Parse()
 	args := flag.Args()
-	// non-arg check
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "error: invalide argument")
 		return
 	}
-	// flag check
 	if err := flagValidate(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
