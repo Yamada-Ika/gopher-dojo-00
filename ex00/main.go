@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"log"
 	"flag"
-	"path/filepath"
-	"image/png"
+	"fmt"
 	"image/jpeg"
+	"image/png"
+	"log"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ func main() {
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "error: invalide argument")
-		os.Exit(0)
+		return
 	}
 	for _, dir := range args {
 		filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
@@ -59,4 +59,3 @@ func main() {
 		})
 	}
 }
-
