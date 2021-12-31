@@ -9,6 +9,7 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"image/gif"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,6 +24,8 @@ func writeImage(file io.Writer, img image.Image) (err error) {
 		err = jpeg.Encode(file, img, nil)
 	case "png":
 		err = png.Encode(file, img)
+	case "gif":
+		err = gif.Encode(file, img, nil)
 	}
 	if err != nil {
 		return err
@@ -36,6 +39,8 @@ func readImage(file io.Reader) (img image.Image, err error) {
 		img, err = jpeg.Decode(file)
 	case "png":
 		img, err = png.Decode(file)
+	case "gif":
+		img, err = gif.Decode(file)
 	}
 	if err != nil {
 		return nil, err
@@ -70,13 +75,13 @@ func convert(in_path string, out_path string) (err error) {
 
 func flagValidate(iflag string, oflag string) (error) {
 	switch iflag {
-	case "jpg", "png":
+	case "jpg", "png", "gif":
 		return nil
 	default:
 		return errors.New("error: invalide extension")
 	}
 	switch oflag {
-	case "jpg", "png":
+	case "jpg", "png", "gif":
 		return nil
 	default:
 		return errors.New("error: invalide extension")
