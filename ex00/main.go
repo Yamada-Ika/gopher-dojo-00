@@ -16,9 +16,6 @@ var iFlag = flag.String("i", "jpg", "input file extension")
 var oFlag = flag.String("o", "png", "output file extension")
 
 func convert(path string) (err error) {
-	if !strings.HasSuffix(path, ".jpg") {
-		return errors.New(fmt.Sprintf("error: %s is not a valid file\n", path))
-	}
 	in_path := path
 	out_path := strings.Replace(path, ".jpg", ".png", 1)
 	in_file, err := os.Open(in_path)
@@ -46,11 +43,29 @@ func convert(path string) (err error) {
 	return nil
 }
 
+func flagValidate(flag string) (error) {
+	switch flag {
+	case "jpg", "png":
+		return nil
+	default:
+		return errors.New("error: invalide extension")
+	}
+}
+
 func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "error: invalide argument")
+		return
+	}
+	// flag check
+	if err := flagValidate(*iFlag); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	if err := flagValidate(*oFlag); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 	for _, dir := range args {
@@ -62,8 +77,12 @@ func main() {
 			if info.IsDir() {
 				return nil
 			}
+			if !strings.HasSuffix(path, ".jpg") {
+				fmt.Fprintf(os.Stderr, "error: %s is not a valid file\n", path)
+				return nil
+			}
 			if err := convert(path); err != nil {
-				return errors.New("faile : convert")
+				return errors.New("error : failed to convert")
 			}
 			return nil
 		})
