@@ -43,6 +43,9 @@ func convert(path string) error {
 	return nil
 }
 
+var iFlag = flag.String("i", "jpg", "input file extension")
+var oFlag = flag.String("o", "png", "output file extension")
+
 func main() {
 	flag.Parse()
 	args := flag.Args()
