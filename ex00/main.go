@@ -15,10 +15,12 @@ import (
 	"strings"
 )
 
+type Image image.Image
+
 var iFlag = flag.String("i", "jpg", "input file extension")
 var oFlag = flag.String("o", "png", "output file extension")
 
-func writeImage(file io.Writer, img image.Image) (err error) {
+func writeImage(file io.Writer, img Image) (err error) {
 	switch *oFlag {
 	case "jpg":
 		err = jpeg.Encode(file, img, nil)
@@ -33,7 +35,7 @@ func writeImage(file io.Writer, img image.Image) (err error) {
 	return nil
 }
 
-func readImage(file io.Reader) (img image.Image, err error) {
+func readImage(file io.Reader) (img Image, err error) {
 	switch *iFlag {
 	case "jpg":
 		img, err = jpeg.Decode(file)
