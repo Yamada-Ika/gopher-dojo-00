@@ -11,13 +11,13 @@ import (
 )
 
 func validateFlag() error {
-	switch *iFlag {
+	switch *inputFileFormat {
 	case "jpg", "png", "gif":
 		break
 	default:
 		return errors.New("error: invalide extension")
 	}
-	switch *oFlag {
+	switch *outputFileFormat {
 	case "jpg", "png", "gif":
 		break
 	default:
@@ -26,8 +26,8 @@ func validateFlag() error {
 	return nil
 }
 
-var iFlag = flag.String("i", "jpg", "input file extension")
-var oFlag = flag.String("o", "png", "output file extension")
+var inputFileFormat = flag.String("i", "jpg", "input file extension")
+var outputFileFormat = flag.String("o", "png", "output file extension")
 
 func main() {
 	flag.Parse()
@@ -40,8 +40,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
-	iExt := "." + *iFlag
-	oExt := "." + *oFlag
+	inputFileExt := "." + *inputFileFormat
+	outputFileExt := "." + *outputFileFormat
 	for _, dir := range args {
 		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
 			if err != nil {
@@ -51,12 +51,12 @@ func main() {
 			if info.IsDir() {
 				return nil
 			}
-			if !strings.HasSuffix(path, iExt) {
+			if !strings.HasSuffix(path, inputFileExt) {
 				fmt.Fprintf(os.Stderr, "error: %s is not a valid file\n", path)
 				return nil
 			}
 			in_path := path
-			out_path := strings.Replace(path, iExt, oExt, 1)
+			out_path := strings.Replace(path, inputFileExt, outputFileExt, 1)
 			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				return nil

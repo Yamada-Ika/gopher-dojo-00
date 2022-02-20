@@ -12,7 +12,7 @@ import (
 type Image image.Image
 
 func writeImage(file io.Writer, img Image) (err error) {
-	switch *oFlag {
+	switch *outputFileFormat {
 	case "jpg":
 		err = jpeg.Encode(file, img, nil)
 	case "png":
@@ -27,7 +27,7 @@ func writeImage(file io.Writer, img Image) (err error) {
 }
 
 func readImage(file io.Reader) (img Image, err error) {
-	switch *iFlag {
+	switch *inputFileFormat {
 	case "jpg":
 		img, err = jpeg.Decode(file)
 	case "png":
