@@ -1,8 +1,8 @@
 NAME		:= convert
 ifndef WITH_BONUS
-	SRCS	:= main.go convert.go
+	SRCS	:= main.go convert.go utils.go
 else
-	SRCS	:= main_bonus.go convert_bonus.go
+	SRCS	:= main_bonus.go convert_bonus.go utils.go
 endif
 
 all: $(NAME)

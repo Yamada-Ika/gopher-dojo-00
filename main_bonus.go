@@ -33,7 +33,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "error: invalide argument")
+		fmt.Fprintln(os.Stderr, "error: invalid argument")
 		return
 	}
 	if err := validateFlag(); err != nil {
@@ -56,7 +56,7 @@ func main() {
 				return nil
 			}
 			in_path := path
-			out_path := strings.Replace(path, inputFileExt, outputFileExt, 1)
+			out_path := replaceSuffix(path, inputFileExt, outputFileExt)
 			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				return nil

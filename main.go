@@ -13,7 +13,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "error: invalide argument")
+		fmt.Fprintln(os.Stderr, "error: invalid argument")
 		return
 	}
 	for _, dir := range args {
@@ -30,7 +30,7 @@ func main() {
 				return nil
 			}
 			in_path := path
-			out_path := strings.Replace(path, ".jpg", ".png", 1)
+			out_path := replaceSuffix(path, ".jpg", ".png")
 			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				return nil
