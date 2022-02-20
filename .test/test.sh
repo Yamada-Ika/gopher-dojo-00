@@ -26,42 +26,56 @@ function ASSERT() {
 	fi
 }
 
-function TEST_ERROR_CASE() {
+function TEST_MANDATORY_ERROR_CASE() {
 	echo -e "\nmandatory error test : START\n"
 
 	echo "run : ../convert"
 	ASSERT "$(../convert 2>&1)" "error: invalid argument"
+
 	echo "run : ../convert nosuchdirectory"
 	ASSERT "$(../convert nosuchdirectory 2>&1)" "error: nosuchdirectory: no such file or directory"
+
 	echo "run : ../convert images/dummys/test1.jpg"
-	../convert images/dummys/test1.jpg
+	ASSERT "$(../convert images/dummys/test1.jpg 2>&1)" "error: images/dummys/test1.jpg invalid JPEG format: missing SOI marker"
+
 	echo "run : ../convert images/dummys/test2.png"
-	../convert images/dummys/test2.png
+	ASSERT "$(../convert images/dummys/test2.png 2>&1)" ""
+
 	echo "run : ../convert images/dummys/test3.gif"
-	../convert images/dummys/test3.gif
+	ASSERT "$(../convert images/dummys/test3.gif 2>&1)" "error: images/dummys/test3.gif is not a valid file"
+
 	echo "run : ../convert images/dummys/test4.jpg"
-	../convert images/dummys/test4.jpg
+	ASSERT "$(../convert images/dummys/test4.jpg 2>&1)" "error: images/dummys/test4.jpg unexpected EOF"
+
 	echo "run : ../convert images/dummys/test5.png"
-	../convert images/dummys/test5.png
+	ASSERT "$(../convert images/dummys/test5.png 2>&1)" ""
+
 	echo "run : ../convert images/dummys/test6.gif"
-	../convert images/dummys/test6.gif
+	ASSERT "$(../convert images/dummys/test6.gif 2>&1)" "error: images/dummys/test6.gif is not a valid file"
+
 	echo "run : ../convert images/dummys/test7.jpg"
-	../convert images/dummys/test7.jpg
+	ASSERT "$(../convert images/dummys/test7.jpg 2>&1)" ""
+
 	echo "run : ../convert images/dummys/test8.png"
-	../convert images/dummys/test8.png
+	ASSERT "$(../convert images/dummys/test8.png 2>&1)" ""
+
 	echo "run : ../convert images/dummys/test9.gif"
-	../convert images/dummys/test9.gif
+	ASSERT "$(../convert images/dummys/test9.gif 2>&1)" ""
+
 	echo "run : ../convert images/dummys/test10.txt"
-	../convert images/dummys/test10.txt
+	ASSERT "$(../convert images/dummys/test10.txt 2>&1)" "error: images/dummys/test10.txt is not a valid file"
+
 	echo "run : ../convert images/dummys/test11"
-	../convert images/dummys/test11
+	ASSERT "$(../convert images/dummys/test11 2>&1)" "error: images/dummys/test11 is not a valid file"
+
 	echo "run : ../convert images/dummys/gif.gif"
-	../convert images/dummys/gif.gif
+	ASSERT "$(../convert images/dummys/gif.gif 2>&1)" "error: images/dummys/gif.gif is not a valid file"
+
 	echo "run : ../convert images/dummys/jpg.jpg"
-	../convert images/dummys/jpg.jpg
+	ASSERT "$(../convert images/dummys/jpg.jpg 2>&1)" "error: images/dummys/jpg.jpg unexpected EOF"
+
 	echo "run : ../convert images/dummys/png.png"
-	../convert images/dummys/png.png
-	echo "run : ../convert images/dummys/.gif.gif"
+	ASSERT "$(../convert images/dummys/png.png 2>&1)" ""
 
 	echo -e "\nmandatory error test : OK\n"
 }
@@ -198,11 +212,10 @@ function TEST_BONUS() {
 if [ $# -eq 0 ]
 then
 	TEST_MANDATORY
-	TEST_ERROR_CASE
+	TEST_MANDATORY_ERROR_CASE
 elif [ "$@" = "bonus" ]
 then
 	TEST_BONUS
-	TEST_ERROR_CASE
 else
 	echo "Usage: bash $0 [bonus]"
 fi
