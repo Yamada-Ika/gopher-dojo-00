@@ -31,7 +31,7 @@ func main() {
 			}
 			in_path := path
 			out_path := strings.Replace(path, ".jpg", ".png", 1)
-			if err := convert(in_path, out_path); err != nil {
+			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				return nil
 			}

@@ -26,7 +26,7 @@ func readImage(file io.Reader) (img Image, err error) {
 	return img, nil
 }
 
-func convert(in_path string, out_path string) (err error) {
+func convertImage(in_path string, out_path string) (err error) {
 	in_file, err := os.Open(in_path)
 	if err != nil {
 		return err
