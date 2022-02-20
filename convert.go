@@ -10,8 +10,8 @@ import (
 
 type Image image.Image
 
-func writeImage(file io.Writer, img Image) (err error) {
-	err = png.Encode(file, img)
+func writeImage(file io.Writer, img Image) error {
+	err := png.Encode(file, img)
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func readImage(file io.Reader) (img Image, err error) {
 	return img, nil
 }
 
-func convertImage(in_path string, out_path string) (err error) {
+func convertImage(in_path string, out_path string) error {
 	in_file, err := os.Open(in_path)
 	if err != nil {
 		return err
