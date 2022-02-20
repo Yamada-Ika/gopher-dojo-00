@@ -48,7 +48,7 @@ func main() {
 				fmt.Fprintf(os.Stderr, "error: %s: no such file or directory\n", path)
 				return err
 			}
-			if info.IsDir() {
+			if info.IsDir() || strings.HasSuffix(path, outputFileExt) {
 				return nil
 			}
 			if !strings.HasSuffix(path, inputFileExt) {
