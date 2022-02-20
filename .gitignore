@@ -1,8 +1,3 @@
-*.swp
-*.jpg
-*.png
-*.gif
-hoge
-huga
+images
 convert
 .DS_Store
