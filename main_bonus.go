@@ -3,22 +3,19 @@ package main
 import (
 	"errors"
 	"flag"
-	"io"
-	"io/fs"
 	"fmt"
 	"image"
+	"image/gif"
 	"image/jpeg"
 	"image/png"
-	"image/gif"
+	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
 type Image image.Image
-
-var iFlag = flag.String("i", "jpg", "input file extension")
-var oFlag = flag.String("o", "png", "output file extension")
 
 func writeImage(file io.Writer, img Image) (err error) {
 	switch *oFlag {
@@ -75,7 +72,7 @@ func convert(in_path string, out_path string) (err error) {
 	return nil
 }
 
-func flagValidate() (error) {
+func flagValidate() error {
 	switch *iFlag {
 	case "jpg", "png", "gif":
 		return nil
@@ -89,6 +86,9 @@ func flagValidate() (error) {
 		return errors.New("error: invalide extension")
 	}
 }
+
+var iFlag = flag.String("i", "jpg", "input file extension")
+var oFlag = flag.String("o", "png", "output file extension")
 
 func main() {
 	flag.Parse()
