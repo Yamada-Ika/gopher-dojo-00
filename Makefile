@@ -2,12 +2,12 @@ NAME		:= convert
 ifndef WITH_BONUS
 	SRCS	:= main.go convert.go
 else
-	SRCS	:= main_bonus.go
+	SRCS	:= main_bonus.go convert_bonus.go
 endif
 
 all: $(NAME)
 
-$(NAME):
+$(NAME): $(SRCS)
 	go build -o $(NAME) $(SRCS)
 
 bonus:
