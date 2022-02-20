@@ -58,7 +58,7 @@ func main() {
 			in_path := path
 			out_path := replaceSuffix(path, inputFileExt, outputFileExt)
 			if err := convertImage(in_path, out_path); err != nil {
-				fmt.Fprintln(os.Stderr, err)
+				fmt.Fprintf(os.Stderr, "error: %s %v\n", path, err)
 				return nil
 			}
 			return nil

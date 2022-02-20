@@ -22,7 +22,7 @@ func main() {
 				fmt.Fprintf(os.Stderr, "error: %s: no such file or directory\n", path)
 				return err
 			}
-			if info.IsDir() {
+			if info.IsDir() || strings.HasSuffix(path, ".png") {
 				return nil
 			}
 			if !strings.HasSuffix(path, ".jpg") {
@@ -32,7 +32,7 @@ func main() {
 			in_path := path
 			out_path := replaceSuffix(path, ".jpg", ".png")
 			if err := convertImage(in_path, out_path); err != nil {
-				fmt.Fprintln(os.Stderr, err)
+				fmt.Fprintf(os.Stderr, "error: %s %v\n", path, err)
 				return nil
 			}
 			return nil
