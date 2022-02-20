@@ -72,19 +72,20 @@ func convert(in_path string, out_path string) (err error) {
 	return nil
 }
 
-func flagValidate() error {
+func validateFlag() error {
 	switch *iFlag {
 	case "jpg", "png", "gif":
-		return nil
+		break
 	default:
 		return errors.New("error: invalide extension")
 	}
 	switch *oFlag {
 	case "jpg", "png", "gif":
-		return nil
+		break
 	default:
 		return errors.New("error: invalide extension")
 	}
+	return nil
 }
 
 var iFlag = flag.String("i", "jpg", "input file extension")
@@ -97,7 +98,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "error: invalide argument")
 		return
 	}
-	if err := flagValidate(); err != nil {
+	if err := validateFlag(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
