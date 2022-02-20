@@ -27,52 +27,47 @@ function ASSERT() {
 }
 
 function TEST_ERROR_CASE() {
-	echo "mandatory error test : START"
+	echo -e "\nmandatory error test : START\n"
 
-	cd ..
+	echo "run : ../convert"
+	ASSERT "$(../convert 2>&1)" "error: invalid argument"
+	echo "run : ../convert nosuchdirectory"
+	ASSERT "$(../convert nosuchdirectory 2>&1)" "error: nosuchdirectory: no such file or directory"
+	echo "run : ../convert images/dummys/test1.jpg"
+	../convert images/dummys/test1.jpg
+	echo "run : ../convert images/dummys/test2.png"
+	../convert images/dummys/test2.png
+	echo "run : ../convert images/dummys/test3.gif"
+	../convert images/dummys/test3.gif
+	echo "run : ../convert images/dummys/test4.jpg"
+	../convert images/dummys/test4.jpg
+	echo "run : ../convert images/dummys/test5.png"
+	../convert images/dummys/test5.png
+	echo "run : ../convert images/dummys/test6.gif"
+	../convert images/dummys/test6.gif
+	echo "run : ../convert images/dummys/test7.jpg"
+	../convert images/dummys/test7.jpg
+	echo "run : ../convert images/dummys/test8.png"
+	../convert images/dummys/test8.png
+	echo "run : ../convert images/dummys/test9.gif"
+	../convert images/dummys/test9.gif
+	echo "run : ../convert images/dummys/test10.txt"
+	../convert images/dummys/test10.txt
+	echo "run : ../convert images/dummys/test11"
+	../convert images/dummys/test11
+	echo "run : ../convert images/dummys/gif.gif"
+	../convert images/dummys/gif.gif
+	echo "run : ../convert images/dummys/jpg.jpg"
+	../convert images/dummys/jpg.jpg
+	echo "run : ../convert images/dummys/png.png"
+	../convert images/dummys/png.png
+	echo "run : ../convert images/dummys/.gif.gif"
 
-	echo "run : ./convert"
-	ASSERT "$(./convert 2>&1)" "error: invalid argument"
-	echo "run : ./convert nosuchdirectory"
-	ASSERT "$(./convert nosuchdirectory 2>&1)" "error: nosuchdirectory: no such file or directory"
-	echo "run : ./convert images/dummys/test1.jpg"
-	./convert images/dummys/test1.jpg
-	echo "run : ./convert images/dummys/test2.png"
-	./convert images/dummys/test2.png
-	echo "run : ./convert images/dummys/test3.gif"
-	./convert images/dummys/test3.gif
-	echo "run : ./convert images/dummys/test4.jpg"
-	./convert images/dummys/test4.jpg
-	echo "run : ./convert images/dummys/test5.png"
-	./convert images/dummys/test5.png
-	echo "run : ./convert images/dummys/test6.gif"
-	./convert images/dummys/test6.gif
-	echo "run : ./convert images/dummys/test7.jpg"
-	./convert images/dummys/test7.jpg
-	echo "run : ./convert images/dummys/test8.png"
-	./convert images/dummys/test8.png
-	echo "run : ./convert images/dummys/test9.gif"
-	./convert images/dummys/test9.gif
-	echo "run : ./convert images/dummys/test10.txt"
-	./convert images/dummys/test10.txt
-	echo "run : ./convert images/dummys/test11"
-	./convert images/dummys/test11
-	echo "run : ./convert images/dummys/gif.gif"
-	./convert images/dummys/gif.gif
-	echo "run : ./convert images/dummys/jpg.jpg"
-	./convert images/dummys/jpg.jpg
-	echo "run : ./convert images/dummys/png.png"
-	./convert images/dummys/png.png
-	echo "run : ./convert images/dummys/.gif.gif"
-
-	cd .test
-
-	echo "mandatory error test : OK"
+	echo -e "\nmandatory error test : OK\n"
 }
 
 function PRINT_IMAGE_LIST_TO_BE_CONVERTED() {
 	echo -n "image to be converted : "
-	# file_list=$1
 	file_list=(${1})
 	for file in ${file_list[@]}; do
 		echo -n "$file "
@@ -81,9 +76,7 @@ function PRINT_IMAGE_LIST_TO_BE_CONVERTED() {
 }
 
 function TEST_MANDATORY() {
-	echo "mandatory test : START"
-
-	cd ..
+	echo -e "\nmandatory test : START\n"
 
 	# ファイルのリスト
 	declare -a jpg_list=()
@@ -106,8 +99,8 @@ function TEST_MANDATORY() {
 		png_list+=($png_file)
 	done
 
-	echo "run : ./convert images"
-	./convert images > /dev/null 2>&1
+	echo "run : ../convert images"
+	../convert images > /dev/null 2>&1
 
 	# jpegファイルがpngファイルに変換されているか
 	for elem in ${jpg_list[@]}; do
@@ -120,8 +113,7 @@ function TEST_MANDATORY() {
 	# 作成されたファイルを削除
 	DELETE_IMAGE_FILES "${png_list[*]}"
 
-	cd .test
-	echo "mandatory test : OK"
+	echo -e "\nmandatory test : OK\n"
 }
 
 function TEST_EXT1_TO_EXT2() {
@@ -166,8 +158,8 @@ function TEST_EXT1_TO_EXT2() {
 		out_file_list+=($(echo $elem | sed -e "s/\.[^.]*$/.$out_file_ext/"))
 	done
 
-	echo "run : ./convert -i=$in_file_ext -o=$out_file_ext images"
-	./convert -i=$in_file_ext -o=$out_file_ext images > /dev/null 2>&1
+	echo "run : ../convert -i=$in_file_ext -o=$out_file_ext images"
+	../convert -i=$in_file_ext -o=$out_file_ext images > /dev/null 2>&1
 
 	# jpegファイルがpngファイルに変換されているか
 	for elem in ${in_file_list[@]}; do
@@ -192,7 +184,6 @@ function TEST_EXT1_TO_EXT2() {
 
 function TEST_BONUS() {
 	echo "bonus test : START"
-	cd ..
 
 	TEST_EXT1_TO_EXT2 "jpg" "png"
 	TEST_EXT1_TO_EXT2 "jpg" "gif"
@@ -201,7 +192,6 @@ function TEST_BONUS() {
 	TEST_EXT1_TO_EXT2 "gif" "jpg"
 	TEST_EXT1_TO_EXT2 "gif" "png"
 
-	cd .test
 	echo "bonus test : OK"
 }
 
