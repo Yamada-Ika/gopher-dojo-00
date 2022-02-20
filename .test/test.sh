@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function DEBUG_PRINT_ARRAY() {
-	array=$1
+	array=(${1})
 	i=0
 	for elem in ${array[@]}; do
 		echo "array[$i] = ${elem}" 1>&2
@@ -10,20 +10,74 @@ function DEBUG_PRINT_ARRAY() {
 }
 
 function DELETE_IMAGE_FILES() {
-	image_file_list=$1
+	image_file_list=(${1})
 	for image_file in ${image_file_list[@]}; do
 		rm -rf $image_file
 	done
 }
 
 function ASSERT() {
-	res=$1
-	exp=$2
-	if [ "$1" != "$2" ]
+	res="$1"
+	exp="$2"
+	if [ "$res" != "$exp" ]
 	then
 		echo "Assert faile : $res should be $exp" 1>&2
 		exit 1
 	fi
+}
+
+function TEST_ERROR_CASE() {
+	echo "mandatory error test : START"
+
+	cd ..
+
+	echo "run : ./convert"
+	ASSERT "$(./convert 2>&1)" "error: invalid argument"
+	echo "run : ./convert nosuchdirectory"
+	ASSERT "$(./convert nosuchdirectory 2>&1)" "error: nosuchdirectory: no such file or directory"
+	echo "run : ./convert images/dummys/test1.jpg"
+	./convert images/dummys/test1.jpg
+	echo "run : ./convert images/dummys/test2.png"
+	./convert images/dummys/test2.png
+	echo "run : ./convert images/dummys/test3.gif"
+	./convert images/dummys/test3.gif
+	echo "run : ./convert images/dummys/test4.jpg"
+	./convert images/dummys/test4.jpg
+	echo "run : ./convert images/dummys/test5.png"
+	./convert images/dummys/test5.png
+	echo "run : ./convert images/dummys/test6.gif"
+	./convert images/dummys/test6.gif
+	echo "run : ./convert images/dummys/test7.jpg"
+	./convert images/dummys/test7.jpg
+	echo "run : ./convert images/dummys/test8.png"
+	./convert images/dummys/test8.png
+	echo "run : ./convert images/dummys/test9.gif"
+	./convert images/dummys/test9.gif
+	echo "run : ./convert images/dummys/test10.txt"
+	./convert images/dummys/test10.txt
+	echo "run : ./convert images/dummys/test11"
+	./convert images/dummys/test11
+	echo "run : ./convert images/dummys/gif.gif"
+	./convert images/dummys/gif.gif
+	echo "run : ./convert images/dummys/jpg.jpg"
+	./convert images/dummys/jpg.jpg
+	echo "run : ./convert images/dummys/png.png"
+	./convert images/dummys/png.png
+	echo "run : ./convert images/dummys/.gif.gif"
+
+	cd .test
+
+	echo "mandatory error test : OK"
+}
+
+function PRINT_IMAGE_LIST_TO_BE_CONVERTED() {
+	echo -n "image to be converted : "
+	# file_list=$1
+	file_list=(${1})
+	for file in ${file_list[@]}; do
+		echo -n "$file "
+	done
+	echo ""
 }
 
 function TEST_MANDATORY() {
@@ -36,13 +90,15 @@ function TEST_MANDATORY() {
 	declare -a png_list=()
 
 	# imageディレクトリからjpgファイルのリストを作成
-	for file in `ls images/*.jpg`
+	for file in `find images`
 	do
 		if [ $(file $file | awk '{print $2}') = "JPEG" ]
 		then
 			jpg_list+=($file)
 		fi
 	done
+
+	PRINT_IMAGE_LIST_TO_BE_CONVERTED "${jpg_list[*]}"
 
 	# pngファイルのリストを作成
 	for elem in ${jpg_list[@]}; do
@@ -62,7 +118,7 @@ function TEST_MANDATORY() {
 	done
 
 	# 作成されたファイルを削除
-	DELETE_IMAGE_FILES $png_list
+	DELETE_IMAGE_FILES "${png_list[*]}"
 
 	cd .test
 	echo "mandatory test : OK"
@@ -77,7 +133,7 @@ function TEST_EXT1_TO_EXT2() {
 	declare -a out_file_list=()
 
 	# imageディレクトリから各ファイルのリストを作成
-	for file in `ls images/*.$in_file_ext`
+	for file in `find images`
 	do
 		if [ "$in_file_ext" = "jpg" ]
 		then
@@ -102,6 +158,8 @@ function TEST_EXT1_TO_EXT2() {
 			exit 1
 		fi
 	done
+
+	PRINT_IMAGE_LIST_TO_BE_CONVERTED "${in_file_list[*]}"
 
 	# pngファイルのリストを作成
 	for elem in ${in_file_list[@]}; do
@@ -129,7 +187,7 @@ function TEST_EXT1_TO_EXT2() {
 	done
 
 	# 作成されたファイルを削除
-	DELETE_IMAGE_FILES $out_file_list
+	DELETE_IMAGE_FILES "${out_file_list[*]}"
 }
 
 function TEST_BONUS() {
@@ -150,9 +208,11 @@ function TEST_BONUS() {
 if [ $# -eq 0 ]
 then
 	TEST_MANDATORY
+	TEST_ERROR_CASE
 elif [ "$@" = "bonus" ]
 then
 	TEST_BONUS
+	TEST_ERROR_CASE
 else
 	echo "Usage: bash $0 [bonus]"
 fi
