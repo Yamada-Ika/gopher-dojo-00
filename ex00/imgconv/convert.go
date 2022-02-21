@@ -1,3 +1,4 @@
+// Package imgconv implements image converter
 package imgconv
 
 import (
@@ -57,6 +58,7 @@ func convertImage(in_path string, out_path string) error {
 	return nil
 }
 
+// JpgToPng converts jpeg image file to png image file
 func JpgToPng() error {
 	flag.Parse()
 	args := flag.Args()
