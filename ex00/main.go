@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
+
 	"example.com/ex00/imgconv"
 )
 
 func main() {
-	imgconv.JpgToPng()
+	if err := imgconv.JpgToPng(); err != nil {
+		fmt.Println(err.Error())
+	}
 }

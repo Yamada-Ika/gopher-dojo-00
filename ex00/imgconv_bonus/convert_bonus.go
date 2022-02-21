@@ -95,12 +95,10 @@ func ConvertImage() error {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "error: invalid argument")
-		return nil
+		return errors.New("error: invalid argument")
 	}
 	if err := validateFlag(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return nil
+		return err
 	}
 	inputFileExt := "." + *inputFileFormat
 	outputFileExt := "." + *outputFileFormat
