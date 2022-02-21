@@ -3,13 +3,60 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-func main() {
+type Image image.Image
+
+func writeImage(file io.Writer, img Image) error {
+	err := png.Encode(file, img)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func readImage(file io.Reader) (img Image, err error) {
+	img, err = jpeg.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
+func convertImage(in_path string, out_path string) error {
+	in_file, err := os.Open(in_path)
+	if err != nil {
+		return err
+	}
+	in_img, err := readImage(in_file)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err = in_file.Close()
+	}()
+	out_file, err := os.Create(out_path)
+	if err != nil {
+		return err
+	}
+	if err := writeImage(out_file, in_img); err != nil {
+		return err
+	}
+	defer func() {
+		err = out_file.Close()
+	}()
+	return nil
+}
+
+func jpgToPng() error {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
