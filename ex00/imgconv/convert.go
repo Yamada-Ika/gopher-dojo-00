@@ -66,8 +66,8 @@ func JpgToPng() error {
 	for _, dir := range args {
 		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "error: %s: no such file or directory\n", path)
-				return err
+				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
+				return nil
 			}
 			if info.IsDir() || strings.HasSuffix(path, ".png") {
 				return nil
@@ -79,7 +79,7 @@ func JpgToPng() error {
 			in_path := path
 			out_path := replaceSuffix(path, ".jpg", ".png")
 			if err := convertImage(in_path, out_path); err != nil {
-				fmt.Fprintf(os.Stderr, "error: %s %v\n", path, err)
+				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
 				return nil
 			}
 			return nil
