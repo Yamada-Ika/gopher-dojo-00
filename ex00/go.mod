@@ -1,3 +1,3 @@
-module github.com/Yamada-Ika/gopher-dojo-00
+module example.com/ex00
 
 go 1.17

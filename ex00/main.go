@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Yamada-Ika/gopher-dojo-00/ex00/imgconv"
+	"example.com/ex00/imgconv"
 )
 
 func main() {

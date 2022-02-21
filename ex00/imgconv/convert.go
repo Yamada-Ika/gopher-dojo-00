@@ -1,4 +1,4 @@
-package main
+package imgconv
 
 import (
 	"flag"
@@ -56,12 +56,12 @@ func convertImage(in_path string, out_path string) error {
 	return nil
 }
 
-func jpgToPng() error {
+func JpgToPng() error {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "error: invalid argument")
-		return
+		return nil
 	}
 	for _, dir := range args {
 		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
@@ -85,4 +85,5 @@ func jpgToPng() error {
 			return nil
 		})
 	}
+	return nil
 }
