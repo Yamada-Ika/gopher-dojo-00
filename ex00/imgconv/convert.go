@@ -1,4 +1,4 @@
-// Package imgconv implements image converter
+// Package imgconv implements jpeg to png image converter
 package imgconv
 
 import (
