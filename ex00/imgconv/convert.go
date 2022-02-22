@@ -15,9 +15,9 @@ import (
 	"strings"
 )
 
-type Image image.Image
+type myImage image.Image
 
-func writeImage(file io.Writer, img Image) error {
+func writeImage(file io.Writer, img myImage) error {
 	err := png.Encode(file, img)
 	if err != nil {
 		return err
@@ -25,7 +25,7 @@ func writeImage(file io.Writer, img Image) error {
 	return nil
 }
 
-func readImage(file io.Reader) (img Image, err error) {
+func readImage(file io.Reader) (img myImage, err error) {
 	img, err = jpeg.Decode(file)
 	if err != nil {
 		return nil, err
@@ -58,7 +58,11 @@ func convertImage(in_path string, out_path string) error {
 	return nil
 }
 
-// JpgToPng converts jpeg image file to png image file
+// JpgToPng converts jpeg format image files in the directory passed as command line argument to png format image files.
+// Even if the specified directory has subdirectories, image files under the subdirectories will be converted.
+// If no directory is passed as an argument, an error is returned.
+// If more than one directory is passed, it will search the directories in the order they are passed.
+// Even if a text file or other file not to be converted is found during the search, it will continue to convert other files.
 func JpgToPng() error {
 	flag.Parse()
 	args := flag.Args()
