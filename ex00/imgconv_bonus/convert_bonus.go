@@ -1,3 +1,4 @@
+// Package imgconv implements image converter
 package imgconv_bonus
 
 import (
@@ -15,9 +16,9 @@ import (
 	"strings"
 )
 
-type Image image.Image
+type myImage image.Image
 
-func writeImage(file io.Writer, img Image) (err error) {
+func writeImage(file io.Writer, img myImage) (err error) {
 	switch *outputFileFormat {
 	case "jpg":
 		err = jpeg.Encode(file, img, nil)
@@ -32,7 +33,7 @@ func writeImage(file io.Writer, img Image) (err error) {
 	return nil
 }
 
-func readImage(file io.Reader) (img Image, err error) {
+func readImage(file io.Reader) (img myImage, err error) {
 	switch *inputFileFormat {
 	case "jpg":
 		img, err = jpeg.Decode(file)
@@ -91,6 +92,16 @@ func validateFlag() error {
 var inputFileFormat = flag.String("i", "jpg", "input file extension")
 var outputFileFormat = flag.String("o", "png", "output file extension")
 
+// ConvertImage converts image files that exist in a directory passed as a command line argument.
+// The file to be converted is specified by -i.
+// The file to be converted is specified by -o as well.
+// The image formats supported are jpeg, png, and gif.
+// If no image format is specified, jpeg files will be converted to png files.
+// Even if the specified directory has subdirectories, image files under the subdirectories will be converted.
+// If no directory is passed as an argument, an error will be returned.
+// It also returns an error if the appropriate image format is not specified.
+// If multiple directories are passed, it will search the directories in the order they are passed.
+// Even if a text file or other file not to be converted is found during the search, it will continue to convert other files.
 func ConvertImage() error {
 	flag.Parse()
 	args := flag.Args()
