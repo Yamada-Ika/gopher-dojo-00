@@ -132,7 +132,7 @@ func ConvertImage() error {
 				return nil
 			}
 			in_path := path
-			out_path := replaceSuffix(path, inputFileExt, outputFileExt)
+			out_path := replaceFileExtent(path, inputFileExt, outputFileExt)
 			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
 				return nil

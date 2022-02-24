@@ -21,6 +21,15 @@ func trimError(err error) string {
 	return s
 }
 
+func replaceFileExtent(filePath, oldExt, newExt string) string {
+	if strings.HasSuffix(filePath, ".jpg") && oldExt == ".jpeg" {
+		return replaceSuffix(filePath, ".jpg", newExt)
+	} else if strings.HasSuffix(filePath, ".jpeg") && oldExt == ".jpg" {
+		return replaceSuffix(filePath, ".jpeg", newExt)
+	}
+	return replaceSuffix(filePath, oldExt, newExt)
+}
+
 func replaceSuffix(s, old, new string) string {
 	return strings.TrimSuffix(s, old) + new
 }
