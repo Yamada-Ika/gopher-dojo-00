@@ -1,8 +1,28 @@
 package imgconv
 
 import (
+	"errors"
+	"os"
 	"strings"
 )
+
+func getFileExtentFromFile(filePath string) string {
+	dot_at := 0
+	for i := len(filePath) - 1; i > -1; i-- {
+		if filePath[i] == '.' {
+			dot_at = i
+			break
+		}
+	}
+	return filePath[dot_at:]
+}
+
+func validateArgs() error {
+	if len(os.Args) == 1 {
+		return errors.New("error: invalid argument")
+	}
+	return nil
+}
 
 func trimError(err error) string {
 	s := err.Error()
