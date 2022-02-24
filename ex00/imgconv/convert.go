@@ -10,7 +10,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type myImage image.Image
@@ -71,10 +70,10 @@ func JpgToPng() error {
 				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
 				return nil
 			}
-			if info.IsDir() || strings.HasSuffix(path, ".png") {
+			if info.IsDir() || isValidFileExtent(path, ".png") {
 				return nil
 			}
-			if !(strings.HasSuffix(path, ".jpg") || strings.HasSuffix(path, ".jpeg")) {
+			if !isValidFileExtent(path, ".jpg") {
 				fmt.Fprintf(os.Stderr, "error: %s is not a valid file\n", path)
 				return nil
 			}

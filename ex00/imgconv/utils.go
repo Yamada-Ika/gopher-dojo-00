@@ -24,6 +24,13 @@ func validateArgs() error {
 	return nil
 }
 
+func isValidFileExtent(path, ext string) bool {
+	if ext == ".jpg" || ext == ".jpeg" {
+		return strings.HasSuffix(path, ".jpg") || strings.HasSuffix(path, ".jpeg")
+	}
+	return strings.HasSuffix(path, ext)
+}
+
 func trimError(err error) string {
 	s := err.Error()
 	for i, c := range s {
