@@ -78,12 +78,12 @@ func JpgToPng() error {
 			if info.IsDir() || strings.HasSuffix(path, ".png") {
 				return nil
 			}
-			if !strings.HasSuffix(path, ".jpg") {
+			if !(strings.HasSuffix(path, ".jpg") || strings.HasSuffix(path, ".jpeg")) {
 				fmt.Fprintf(os.Stderr, "error: %s is not a valid file\n", path)
 				return nil
 			}
 			in_path := path
-			out_path := replaceSuffix(path, ".jpg", ".png")
+			out_path := replaceSuffix(in_path, getFileExtensionFromFilePath(in_path), ".png")
 			if err := convertImage(in_path, out_path); err != nil {
 				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
 				return nil
@@ -92,4 +92,15 @@ func JpgToPng() error {
 		})
 	}
 	return nil
+}
+
+func getFileExtensionFromFilePath(filePath string) string {
+	dot_at := 0
+	for i := len(filePath) - 1; i > -1; i-- {
+		if filePath[i] == '.' {
+			dot_at = i
+			break
+		}
+	}
+	return filePath[dot_at:]
 }
