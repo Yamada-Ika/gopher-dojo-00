@@ -25,10 +25,12 @@ func validateArgs() error {
 }
 
 func isValidFileExtent(path, ext string) bool {
-	if ext == ".jpg" || ext == ".jpeg" {
+	switch ext {
+	case ".jpg", ".jpeg":
 		return strings.HasSuffix(path, ".jpg") || strings.HasSuffix(path, ".jpeg")
+	default:
+		return strings.HasSuffix(path, ext)
 	}
-	return strings.HasSuffix(path, ext)
 }
 
 func trimError(err error) string {
