@@ -118,7 +118,7 @@ func ConvertImage() error {
 		return err
 	}
 	inputFileExt, outputFileExt := "."+*inputFileFormat, "."+*outputFileFormat
-	for _, dir := range os.Args[1:] {
+	for _, dir := range flag.Args() {
 		filepath.WalkDir(dir, func(path string, info fs.DirEntry, err error) error {
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "error: %s\n", trimError(err))
